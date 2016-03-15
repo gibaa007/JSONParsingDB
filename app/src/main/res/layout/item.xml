@@ -1,0 +1,69 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/darker_gray"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:background="@android:color/white"
+        android:elevation="2dp"
+        android:padding="1dp"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="1dp"
+        app:cardUseCompatPadding="true">
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+
+            <!-- Thumbnail Image -->
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/thumbnail"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginRight="5dp" />
+
+            <!-- Movie Title -->
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/thumbnail"
+                android:layout_toRightOf="@+id/thumbnail"
+                android:textStyle="bold" />
+
+            <!-- Rating -->
+            <TextView
+                android:id="@+id/rating"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/title"
+                android:layout_marginTop="1dip"
+                android:layout_toRightOf="@+id/thumbnail" />
+
+            <!-- Release Year -->
+            <TextView
+                android:id="@+id/releaseYear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_toRightOf="@+id/thumbnail"/>
+            <!-- Favourite -->
+            <ImageView
+                android:id="@+id/fav"
+                android:layout_width="30dp"
+                android:layout_height="80dp"
+                android:gravity="center"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_non_favorite" />
+
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>
