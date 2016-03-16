@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
@@ -91,7 +92,8 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Cu
                                 db.deleteContact(feedItem);
                                 Snackbar snackbar = Snackbar
                                         .make(coordinatorLayout, "Movie Deleted", Snackbar.LENGTH_LONG);
-
+                                setMovieItems(db.getAllContacts());
+                                notifyDataSetChanged();
                                 // Changing message text color
                                 snackbar.setActionTextColor(Color.RED);
                                 // Changing action button text color
@@ -110,7 +112,6 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Cu
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
-
                 return false;
             }
         });
@@ -170,6 +171,7 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Cu
                     snackbar.show();
                 }
                 db.updateContact(feedItem);
+                setMovieItems(db.getAllContacts());
 
 
             }

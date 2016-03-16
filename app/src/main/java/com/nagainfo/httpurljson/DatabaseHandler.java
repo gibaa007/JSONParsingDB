@@ -31,7 +31,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        this.context=context;
+        this.context = context;
         //3rd argument to be passed is CursorFactory instance
     }
 
@@ -116,6 +116,31 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return movieList;
     }
 
+    public List<Movie> getAllLikedContacts() {
+        List<Movie> movieList = new ArrayList<Movie>();
+        // Select All Query
+        String selectQuery = "SELECT * FROM " + TABLE + " WHERE " + FAVOURITE + "> 0";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                Movie movie = new Movie();
+                movie.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(KEY_ID))));
+                movie.setTitle(cursor.getString(cursor.getColumnIndex(NAME)));
+                movie.setThumbnailUrl(cursor.getString(cursor.getColumnIndex(IMAGE)));
+                movie.setYear(Integer.parseInt(cursor.getString(cursor.getColumnIndex(YEAR))));
+                movie.setRating(Double.parseDouble(cursor.getString(cursor.getColumnIndex(RATING))));
+                movie.setFav((cursor.getInt(cursor.getColumnIndex(FAVOURITE)) > 0));
+                // Adding contact to list
+                movieList.add(movie);
+            } while (cursor.moveToNext());
+        }
+
+        // return contact list
+        return movieList;
+    }
+
     // code to update the single contact
     public void updateContact(Movie movie) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -156,6 +181,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         }
     }
+
     // Deleting single contact
     public void deleteContact(Movie movie) {
         SQLiteDatabase db = this.getWritableDatabase();
