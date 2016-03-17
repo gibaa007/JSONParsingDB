@@ -1,7 +1,5 @@
 package com.nagainfo.httpurljson;
 
-import android.annotation.SuppressLint;
-import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;

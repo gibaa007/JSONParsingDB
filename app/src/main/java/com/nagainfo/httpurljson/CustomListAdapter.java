@@ -69,7 +69,6 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Cu
                 CustomViewHolder holder = (CustomViewHolder) v.getTag();
                 int position = holder.getPosition();
                 final Movie feedItem = movieItems.get(position);
-
                 Intent image = new Intent(activity, ImageViewActivity.class);
                 image.putExtra("image", feedItem.getThumbnailUrl());
                 activity.startActivity(image);
@@ -110,7 +109,7 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Cu
                                 dialog.dismiss();
                             }
                         })
-                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setIcon(android.R.drawable.ic_menu_delete)
                         .show();
                 return false;
             }
@@ -234,8 +233,6 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Cu
 //
 //        // getting movie data for the row
 //        Movie m = movieItems.get(position);
-//
-//
 //        // title
 //        title.setText(m.getTitle());
 //

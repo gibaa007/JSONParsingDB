@@ -73,20 +73,23 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     //    // code to get the single contact
-//    Movie getContact(int id) {
-//        SQLiteDatabase db = this.getReadableDatabase();
-//
-//        Cursor cursor = db.query(TABLE, new String[]{KEY_ID,
-//                        NAME, RATING, YEAR, IMAGE, FAVOURITE}, KEY_ID + "=?",
-//                new String[]{String.valueOf(id)}, null, null, null, null);
-//        if (cursor != null)
-//            cursor.moveToFirst();
-//
-//        Movie movie = new Movie(Integer.parseInt(cursor.getString(0)),
-//                cursor.getString(1), cursor.getString(2), Integer.parseInt(cursor.getString(3)), Double.parseDouble(cursor.getString(4)), Boolean.parseBoolean(cursor.getString(5)));
-//        // return contact
-//        return movie;
-//    }
+    Movie getContact(String id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Movie movie = new Movie();
+        Cursor cursor = db.query(TABLE, new String[]{KEY_ID,
+                        NAME, RATING, YEAR, IMAGE, FAVOURITE}, NAME + "=?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
+        if (cursor != null)
+            if (cursor.moveToFirst()) {
+                    movie.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(KEY_ID))));
+                    movie.setTitle(cursor.getString(cursor.getColumnIndex(NAME)));
+                    movie.setThumbnailUrl(cursor.getString(cursor.getColumnIndex(IMAGE)));
+                    movie.setYear(Integer.parseInt(cursor.getString(cursor.getColumnIndex(YEAR))));
+                    movie.setRating(Double.parseDouble(cursor.getString(cursor.getColumnIndex(RATING))));
+                    movie.setFav((cursor.getInt(cursor.getColumnIndex(FAVOURITE)) > 0));
+                }
+        return movie;
+    }
 
     // code to get all contacts in a list view
     public List<Movie> getAllContacts() {

@@ -8,15 +8,19 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.widget.Toast;
 
 /**
  * Created by nagainfo on 12/3/16.
  */
 public class SearchResultsActivity extends ActionBarActivity {
 
+    private DatabaseHandler db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        db = new DatabaseHandler(this);
         setContentView(R.layout.activity_result);
         handleIntent(getIntent());
     }
@@ -44,8 +48,10 @@ public class SearchResultsActivity extends ActionBarActivity {
 
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            //use the query to search
+            db.getContact(query);
+            Intent image = new Intent(this, ImageViewActivity.class);
+            image.putExtra("image", db.getContact(query).getThumbnailUrl());
+            startActivity(image);
         }
     }
 }
-
