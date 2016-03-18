@@ -1,17 +1,25 @@
 package com.nagainfo.httpurljson;
 
+import android.content.Context;
+import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,25 +43,23 @@ public class MainFragment extends android.support.v4.app.Fragment {
     private List<Movie> movieList = new ArrayList<Movie>();
     private RecyclerView listView;
     private CustomListAdapter adapter;
+    LinearLayout linlaHeaderProgress;
     private SearchView search;
     public Boolean fav = false;
     DatabaseHandler db;
-
-
-
-//    public MainFragment(CoordinatorLayout coordinatorLayout) {
-//        this.coordinatorLayout = coordinatorLayout;
-//    }
+    private SimpleDraweeView imageView;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         View rootView = inflater.inflate(R.layout.main_fragment, container, false);
         db = new DatabaseHandler(getActivity());
         listView = (RecyclerView) rootView.findViewById(R.id.list);
+        imageView = (SimpleDraweeView) rootView.findViewById(R.id.image_view);
+        linlaHeaderProgress = (LinearLayout) rootView.findViewById(R.id.linlaHeaderProgress);
         coordinatorLayout = (CoordinatorLayout) rootView.findViewById(R.id
                 .coordinatorLayout);
-        Fresco.initialize(getActivity());
 //        search = (SearchView) findViewById(R.id.searchView1);
 //        search.setQueryHint("SearchView");
 //
@@ -101,19 +107,43 @@ public class MainFragment extends android.support.v4.app.Fragment {
         AsyncTaskRunner runner = new AsyncTaskRunner();
         listView.setLayoutManager(new LinearLayoutManager(getActivity()));
         String url = "http://api.androidhive.info/json/movies.json";
-        if (db.getContactsCount() == 0)
-            runner.execute(url);
-        else
+        if (db.getContactsCount() == 0) {
+            if (GlobalMethods.isNetworkAvailable(getActivity()))
+                runner.execute(url);
+            else {
+                Snackbar snackbar = Snackbar
+                        .make(coordinatorLayout, "No Internet Connection", Snackbar.LENGTH_INDEFINITE)
+                        .setAction("RETRY", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                onResume();
+                            }
+                        });
+
+                // Changing message text color
+                snackbar.setActionTextColor(Color.RED);
+                // Changing action button text color
+                View sbView = snackbar.getView();
+                sbView.setBackgroundColor(Color.GREEN);
+                TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                textView.setTextColor(Color.BLUE);
+
+                snackbar.show();
+            }
+        } else
             movieList = db.getAllContacts();
-        adapter = new CustomListAdapter(getActivity(), movieList, coordinatorLayout);
+        adapter = new CustomListAdapter(getActivity(), movieList, coordinatorLayout,imageView);
         listView.setAdapter(adapter);
 
     }
+
 
     private class AsyncTaskRunner extends AsyncTask<String, Void, String> {
 
         @Override
         protected void onPreExecute() {
+            // SHOW THE SPINNER WHILE LOADING FEEDS
+            linlaHeaderProgress.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -170,6 +200,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
             }
             adapter.setMovieItems(db.getAllContacts());
             adapter.notifyDataSetChanged();
+            linlaHeaderProgress.setVisibility(View.GONE);
         }
 
     }
@@ -177,11 +208,10 @@ public class MainFragment extends android.support.v4.app.Fragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if(isVisibleToUser){
-            if(db!=null)
-            {
+        if (isVisibleToUser) {
+            if (db != null) {
                 movieList = db.getAllContacts();
-                adapter = new CustomListAdapter(getActivity(), movieList, coordinatorLayout);
+                adapter = new CustomListAdapter(getActivity(), movieList, coordinatorLayout,imageView);
                 listView.setAdapter(adapter);
             }
 

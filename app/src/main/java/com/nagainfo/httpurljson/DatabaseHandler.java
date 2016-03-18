@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -79,15 +80,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         Cursor cursor = db.query(TABLE, new String[]{KEY_ID,
                         NAME, RATING, YEAR, IMAGE, FAVOURITE}, NAME + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
-        if (cursor != null)
+        if (cursor != null) {
             if (cursor.moveToFirst()) {
-                    movie.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(KEY_ID))));
-                    movie.setTitle(cursor.getString(cursor.getColumnIndex(NAME)));
-                    movie.setThumbnailUrl(cursor.getString(cursor.getColumnIndex(IMAGE)));
-                    movie.setYear(Integer.parseInt(cursor.getString(cursor.getColumnIndex(YEAR))));
-                    movie.setRating(Double.parseDouble(cursor.getString(cursor.getColumnIndex(RATING))));
-                    movie.setFav((cursor.getInt(cursor.getColumnIndex(FAVOURITE)) > 0));
-                }
+                movie.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(KEY_ID))));
+                movie.setTitle(cursor.getString(cursor.getColumnIndex(NAME)));
+                movie.setThumbnailUrl(cursor.getString(cursor.getColumnIndex(IMAGE)));
+                movie.setYear(Integer.parseInt(cursor.getString(cursor.getColumnIndex(YEAR))));
+                movie.setRating(Double.parseDouble(cursor.getString(cursor.getColumnIndex(RATING))));
+                movie.setFav((cursor.getInt(cursor.getColumnIndex(FAVOURITE)) > 0));
+            }
+        }
         return movie;
     }
 
@@ -101,20 +103,21 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(selectQuery, null);
 
         // looping through all rows and adding to list
-        if (cursor.moveToFirst()) {
-            do {
-                Movie movie = new Movie();
-                movie.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(KEY_ID))));
-                movie.setTitle(cursor.getString(cursor.getColumnIndex(NAME)));
-                movie.setThumbnailUrl(cursor.getString(cursor.getColumnIndex(IMAGE)));
-                movie.setYear(Integer.parseInt(cursor.getString(cursor.getColumnIndex(YEAR))));
-                movie.setRating(Double.parseDouble(cursor.getString(cursor.getColumnIndex(RATING))));
-                movie.setFav((cursor.getInt(cursor.getColumnIndex(FAVOURITE)) > 0));
-                // Adding contact to list
-                movieList.add(movie);
-            } while (cursor.moveToNext());
-        }
-
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                do {
+                    Movie movie = new Movie();
+                    movie.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(KEY_ID))));
+                    movie.setTitle(cursor.getString(cursor.getColumnIndex(NAME)));
+                    movie.setThumbnailUrl(cursor.getString(cursor.getColumnIndex(IMAGE)));
+                    movie.setYear(Integer.parseInt(cursor.getString(cursor.getColumnIndex(YEAR))));
+                    movie.setRating(Double.parseDouble(cursor.getString(cursor.getColumnIndex(RATING))));
+                    movie.setFav((cursor.getInt(cursor.getColumnIndex(FAVOURITE)) > 0));
+                    // Adding contact to list
+                    movieList.add(movie);
+                } while (cursor.moveToNext());
+            }
+        } else Toast.makeText(context, "No Internet Connection", Toast.LENGTH_SHORT).show();
         // return contact list
         return movieList;
     }
@@ -126,19 +129,21 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
         // looping through all rows and adding to list
-        if (cursor.moveToFirst()) {
-            do {
-                Movie movie = new Movie();
-                movie.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(KEY_ID))));
-                movie.setTitle(cursor.getString(cursor.getColumnIndex(NAME)));
-                movie.setThumbnailUrl(cursor.getString(cursor.getColumnIndex(IMAGE)));
-                movie.setYear(Integer.parseInt(cursor.getString(cursor.getColumnIndex(YEAR))));
-                movie.setRating(Double.parseDouble(cursor.getString(cursor.getColumnIndex(RATING))));
-                movie.setFav((cursor.getInt(cursor.getColumnIndex(FAVOURITE)) > 0));
-                // Adding contact to list
-                movieList.add(movie);
-            } while (cursor.moveToNext());
-        }
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                do {
+                    Movie movie = new Movie();
+                    movie.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(KEY_ID))));
+                    movie.setTitle(cursor.getString(cursor.getColumnIndex(NAME)));
+                    movie.setThumbnailUrl(cursor.getString(cursor.getColumnIndex(IMAGE)));
+                    movie.setYear(Integer.parseInt(cursor.getString(cursor.getColumnIndex(YEAR))));
+                    movie.setRating(Double.parseDouble(cursor.getString(cursor.getColumnIndex(RATING))));
+                    movie.setFav((cursor.getInt(cursor.getColumnIndex(FAVOURITE)) > 0));
+                    // Adding contact to list
+                    movieList.add(movie);
+                } while (cursor.moveToNext());
+            }
+        } else Toast.makeText(context, "No Internet Connection", Toast.LENGTH_SHORT).show();
 
         // return contact list
         return movieList;

@@ -16,9 +16,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
 
+import java.net.URI;
+import java.net.URL;
 import java.util.List;
 import java.util.Random;
 
@@ -27,20 +28,23 @@ import java.util.Random;
  */
 public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.CustomViewHolder> {
     private final CoordinatorLayout coordinatorLayout;
+    private final SimpleDraweeView listView;
     private Activity activity;
     private List<Movie> movieItems;
     private DatabaseHandler db;
 
-    public CustomListAdapter(Activity activity, List<Movie> movieItems, CoordinatorLayout coordinatorLayout) {
+    public CustomListAdapter(Activity activity, List<Movie> movieItems, CoordinatorLayout coordinatorLayout, SimpleDraweeView listView) {
         this.activity = activity;
         this.movieItems = movieItems;
         this.coordinatorLayout = coordinatorLayout;
+        this.listView = listView;
     }
 
     @Override
     public CustomViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item, null);
         db = new DatabaseHandler(activity);
+        listView.setImageURI(Uri.parse(movieItems.get(0).getThumbnailUrl()));
         CustomViewHolder viewHolder = new CustomViewHolder(view);
         return viewHolder;
     }
@@ -49,10 +53,6 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Cu
     public void onBindViewHolder(final CustomViewHolder customViewHolder, int i) {
 
         Movie feedItem = movieItems.get(i);
-
-        Random rnd = new Random();
-        int color = Color.argb(100, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-        customViewHolder.card_view.setBackgroundColor(color);
         customViewHolder.title.setText(feedItem.getTitle());
         customViewHolder.rating.setText("Rating: " + String.valueOf(feedItem.getRating()));
         Uri uri = Uri.parse(feedItem.getThumbnailUrl());
@@ -67,8 +67,7 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Cu
             @Override
             public void onClick(View v) {
                 CustomViewHolder holder = (CustomViewHolder) v.getTag();
-                int position = holder.getPosition();
-                final Movie feedItem = movieItems.get(position);
+                final Movie feedItem = movieItems.get(holder.getPosition());
                 Intent image = new Intent(activity, ImageViewActivity.class);
                 image.putExtra("image", feedItem.getThumbnailUrl());
                 activity.startActivity(image);
@@ -81,8 +80,7 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Cu
             @Override
             public boolean onLongClick(View v) {
                 CustomViewHolder holder = (CustomViewHolder) v.getTag();
-                int position = holder.getPosition();
-                final Movie feedItem = movieItems.get(position);
+                final Movie feedItem = movieItems.get(holder.getPosition());
                 new AlertDialog.Builder(activity)
                         .setTitle("Delete Movie")
                         .setMessage("Are you sure you want to delete this Movie?")
@@ -114,14 +112,21 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Cu
                 return false;
             }
         });
+        customViewHolder.card_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CustomViewHolder holder = (CustomViewHolder) v.getTag();
+                final Movie feedItem = movieItems.get(holder.getPosition());
+                listView.setImageURI(Uri.parse(feedItem.getThumbnailUrl()));
+            }
+        });
 
         customViewHolder.favourite.setTag(customViewHolder);
         customViewHolder.favourite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 CustomViewHolder holder = (CustomViewHolder) v.getTag();
-                int position = holder.getPosition();
-                final Movie feedItem = movieItems.get(position);
+                final Movie feedItem = movieItems.get(holder.getPosition());
                 if (!feedItem.isFav()) {
                     feedItem.setFav(true);
                     customViewHolder.favourite.setImageResource(R.drawable.ic_favorite);
