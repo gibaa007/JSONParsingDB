@@ -16,12 +16,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.backends.pipeline.PipelineDraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
+import com.facebook.imagepipeline.request.Postprocessor;
 
-import java.net.URI;
-import java.net.URL;
 import java.util.List;
-import java.util.Random;
+
+import jp.wasabeef.fresco.processors.BlurPostprocessor;
 
 /**
  * Created by nagainfo on 11/3/16.
@@ -29,10 +33,10 @@ import java.util.Random;
 public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.CustomViewHolder> {
     private final CoordinatorLayout coordinatorLayout;
     private final SimpleDraweeView listView;
-    private Activity activity;
+    private static Activity activity;
     private List<Movie> movieItems;
     private DatabaseHandler db;
-
+    public Postprocessor processor = null;
     public CustomListAdapter(Activity activity, List<Movie> movieItems, CoordinatorLayout coordinatorLayout, SimpleDraweeView listView) {
         this.activity = activity;
         this.movieItems = movieItems;
@@ -44,7 +48,17 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Cu
     public CustomViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item, null);
         db = new DatabaseHandler(activity);
-        listView.setImageURI(Uri.parse(movieItems.get(0).getThumbnailUrl()));
+        processor = new BlurPostprocessor(activity, 25);
+        ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(movieItems.get(0).getThumbnailUrl()))
+                .setPostprocessor(processor)
+                .build();
+
+        PipelineDraweeController controller =
+                (PipelineDraweeController) Fresco.newDraweeControllerBuilder()
+                        .setImageRequest(request)
+                        .setOldController(listView.getController())
+                        .build();
+        listView.setController(controller);
         CustomViewHolder viewHolder = new CustomViewHolder(view);
         return viewHolder;
     }
@@ -117,7 +131,16 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Cu
             public void onClick(View v) {
                 CustomViewHolder holder = (CustomViewHolder) v.getTag();
                 final Movie feedItem = movieItems.get(holder.getPosition());
-                listView.setImageURI(Uri.parse(feedItem.getThumbnailUrl()));
+                ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(feedItem.getThumbnailUrl()))
+                        .setPostprocessor(processor)
+                        .build();
+
+                PipelineDraweeController controller =
+                        (PipelineDraweeController) Fresco.newDraweeControllerBuilder()
+                                .setImageRequest(request)
+                                .setOldController(listView.getController())
+                                .build();
+                listView.setController(controller);
             }
         });
 
