@@ -1,4 +1,4 @@
-package com.nagainfo.httpurljson;
+package com.gibaa007.httpurljson;
 
 import android.Manifest;
 import android.app.Activity;
@@ -13,10 +13,8 @@ import android.os.Environment;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -25,7 +23,7 @@ import java.io.FileOutputStream;
 import java.util.Date;
 
 /**
- * Created by nagainfo on 11/3/16.
+ * Created by gibaa007 on 11/3/16.
  */
 public class ImageViewActivity extends Activity {
     private SimpleDraweeView image;

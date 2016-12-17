@@ -1,4 +1,4 @@
-package com.nagainfo.httpurljson;
+package com.gibaa007.httpurljson;
 
 import android.app.SearchManager;
 import android.content.Context;

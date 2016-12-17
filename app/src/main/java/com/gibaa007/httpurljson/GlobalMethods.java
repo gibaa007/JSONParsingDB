@@ -1,15 +1,11 @@
-package com.nagainfo.httpurljson;
+package com.gibaa007.httpurljson;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.design.widget.Snackbar;
-import android.view.View;
-import android.widget.TextView;
 
 /**
- * Created by nagainfo on 17/3/16.
+ * Created by gibaa007 on 17/3/16.
  */
 public class GlobalMethods {
 

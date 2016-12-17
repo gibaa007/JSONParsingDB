@@ -1,9 +1,6 @@
-package com.nagainfo.httpurljson;
+package com.gibaa007.httpurljson;
 
-import android.content.Context;
 import android.graphics.Color;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,7 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 
-import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.json.JSONArray;
@@ -36,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by nagainfo on 15/3/16.
+ * Created by gibaa007 on 15/3/16.
  */
 public class MainFragment extends android.support.v4.app.Fragment {
     private CoordinatorLayout coordinatorLayout;

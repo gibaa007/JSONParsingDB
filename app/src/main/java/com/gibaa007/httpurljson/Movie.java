@@ -1,7 +1,7 @@
-package com.nagainfo.httpurljson;
+package com.gibaa007.httpurljson;
 
 /**
- * Created by nagainfo on 11/3/16.
+ * Created by gibaa007 on 11/3/16.
  */
 
 public class Movie {

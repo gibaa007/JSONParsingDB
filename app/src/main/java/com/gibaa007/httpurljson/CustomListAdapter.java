@@ -1,4 +1,4 @@
-package com.nagainfo.httpurljson;
+package com.gibaa007.httpurljson;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -28,7 +28,7 @@ import java.util.List;
 import jp.wasabeef.fresco.processors.BlurPostprocessor;
 
 /**
- * Created by nagainfo on 11/3/16.
+ * Created by gibaa007 on 11/3/16.
  */
 public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.CustomViewHolder> {
     private final CoordinatorLayout coordinatorLayout;
